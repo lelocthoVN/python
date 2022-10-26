@@ -67,7 +67,3 @@ if __name__ == "__main__":
     creat_directory(path, 'cat')
     download_img('dog')
     download_img('cat')
-
-"""
-code quoc sua
-"""
