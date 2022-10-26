@@ -68,3 +68,6 @@ if __name__ == "__main__":
     download_img('dog')
     download_img('cat')
 
+"""
+code quoc sua
+"""
