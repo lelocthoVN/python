@@ -1,3 +1,4 @@
+import logging
 from bs4 import BeautifulSoup
 import requests
 import os
@@ -6,8 +7,20 @@ URL = "https://yandex.ru/images/"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"}
 
+def creat_directory(path,folder):
+    """
+    Создать путь для сохранения изображения
+    :param path: путь к файлу для работы
+    :param folder: имя файла для создания
+    :return: Нет возвращаемого значения
+    """
+    try:
+        new_directory = os.path.join(path,folder)
+        os.makedirs(new_directory)
+    except OSError as err:
+        logging.info(f'При создании файл {folder} есть ошибки \n {err}')
 
-def get_image(image_url, name, index):
+def save_image(image_url, name, index):
     """
     сохранение спарсенной картинки в определенную папку
 
@@ -17,48 +30,41 @@ def get_image(image_url, name, index):
     :return: Нет возвращаемого значения
     """
 
-    if not os.path.isdir(name):  # проверить наличие каталога "name"
-        os.mkdir(name)  # если "name" не существует, создайте каталог "name"
     picture = requests.get(f"https:{image_url}", HEADERS)
-    saver = open(os.path.join(f"{name}/{str(index).zfill(4)}.jpg"), "wb")
-    saver.write(picture.content)
-    saver.close()
+    with open(os.path.join("dataset",name,f"{index:04d}.jpg"), "wb") as f:
+        f.write(picture.content)
 
-
-def download_img(path, key):
+def download_img(key):
     """
+    сохранить изображение из ссылки в файл по ключевому слову
+
     :param path: путь к папке, в которой сохранено изображение
     :param key: имя папки, в которой сохранены фотографии, а также ключевое слово для поиска
     :return: Нет возвращаемого значения
     """
-
-    os.chdir(path)  # перейти к работе с каталогом "path"
-    if not os.path.isdir("dataset"):  # проверить наличие каталога "dataset"
-        os.mkdir("dataset")  # если "dataset" не существует, создайте каталог "dataset"
-    os.chdir("dataset")  # перейти к работе с каталогом "dataset"
-
     page = 0
-    count = 0
-    data = []
-    url = f'{URL}search?p={page}&text={key}'
-    rep = requests.get(url, HEADERS)
+    count = 1
+    rep = requests.get(f'{URL}search?p={page}&text={key}', HEADERS)
     soup = BeautifulSoup(rep.text, "lxml")
-    images = soup.findAll('img', class_='serp-item__thumb justifier__thumb')  # 30 len(image
-    while count < 1000:
+    images = soup.findAll('img', class_='serp-item__thumb justifier__thu
+    while count <= 1000:
         print(page)
         for image in images:
-            if count == 1000:
-                return None
+            if count > 1000:
+                print('Загрузка завершена')
+                return
             image_url = image.get("src")  # получить тег SRC со ссылкой на изображение
-            data.append([image_url])
             if (image_url != ""):
-                get_image(image_url, key, count)
+                save_image(image_url, key, count)
                 count += 1
             page += 1
-        print("Nice save images")
+        print("Cохранения изображений")
 
 
 if __name__ == "__main__":
-    directory = os.getcwd()
-    # download_img(directory, 'dog')
-    download_img(directory, 'cat')
+    path = os.path.join(os.getcwd(),'dataset')
+    creat_directory(path, 'dog')
+    creat_directory(path, 'cat')
+    download_img('dog')
+    download_img('cat')
+
