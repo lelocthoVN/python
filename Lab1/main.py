@@ -23,7 +23,6 @@ def creat_directory(path,folder):
 def save_image(image_url, name, index):
     """
     сохранение спарсенной картинки в определенную папку
-
     :param image_url: местоположение (URL) внешнего изображения на который ссылается тег
     :param name: имя папки, в которой сохранены фотографии, а также ключевое слово для поиска
     :param index: порядковый номер изображения в файле
@@ -34,10 +33,9 @@ def save_image(image_url, name, index):
     with open(os.path.join("dataset",name,f"{index:04d}.jpg"), "wb") as f:
         f.write(picture.content)
 
-def download_img(key):
+def download_img(key, amount):
     """
     сохранить изображение из ссылки в файл по ключевому слову
-
     :param path: путь к папке, в которой сохранено изображение
     :param key: имя папки, в которой сохранены фотографии, а также ключевое слово для поиска
     :return: Нет возвращаемого значения
@@ -46,24 +44,22 @@ def download_img(key):
     count = 1
     rep = requests.get(f'{URL}search?p={page}&text={key}', HEADERS)
     soup = BeautifulSoup(rep.text, "lxml")
-    images = soup.findAll('img', class_='serp-item__thumb justifier__thu
-    while count <= 1000:
-        print(page)
+    images = soup.findAll('img', class_='serp-item__thumb justifier__thumb')
+    while count <= amount:
+        print(f'Загрузка изображений на стр.{page}')
         for image in images:
-            if count > 1000:
+            if count > amount:
                 print('Загрузка завершена')
                 return
             image_url = image.get("src")  # получить тег SRC со ссылкой на изображение
             if (image_url != ""):
                 save_image(image_url, key, count)
                 count += 1
-            page += 1
-        print("Cохранения изображений")
-
+        page += 1
 
 if __name__ == "__main__":
     path = os.path.join(os.getcwd(),'dataset')
     creat_directory(path, 'dog')
     creat_directory(path, 'cat')
-    download_img('dog')
-    download_img('cat')
+    download_img('dog',1000)
+    download_img('cat',1000)
