@@ -1,4 +1,7 @@
-import os, random, shutil, logging
+import os
+import random
+import shutil 
+import logging
 from annotation import Annotation
 
 
@@ -15,6 +18,7 @@ def dataset_random(path: str, path_random: str, ann: Annotation) -> None:
             os.mkdir(path_random)
         except OSError:
             logging.warning(f"Create director {path_random} failed")
+            return 
 
     files = os.listdir(path)
     for file in files:

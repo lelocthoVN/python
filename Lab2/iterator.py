@@ -21,6 +21,6 @@ class AnnIterator:
 if __name__ == "__main__":
     path = 'C:/Users/ASUS ZENBOOK/PycharmProjects/pythonProject/dataset'
     ann = Annotation('dataCSV.csv')
-    Iter = AnnIterator(ann)
-    print(Iter.__next__("cat\\0145.jpg"))
-    print(Iter.__next__("dog\\0999.jpg"))
+    iter = AnnIterator(ann)
+    print(iter.__next__("cat\\0145.jpg"))
+    print(iter.__next__("dog\\0999.jpg"))

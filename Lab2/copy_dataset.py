@@ -1,5 +1,7 @@
 from annotation import Annotation
-import os, shutil, logging
+import os
+import shutil
+import logging
 
 
 def copy_dataset(path: str, path_copy: str,  ann: Annotation) -> None:
@@ -15,6 +17,7 @@ def copy_dataset(path: str, path_copy: str,  ann: Annotation) -> None:
             os.mkdir(path_copy)
         except OSError:
             logging.warning(f"Create director {path_copy} failed")
+            return
 
     files = os.listdir(path)
     for file in files:
