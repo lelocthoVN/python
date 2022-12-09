@@ -17,7 +17,6 @@ class Annotation:
         :return: нет возвращаемого значения
         """
         with open(self.filename_dir, "a", encoding="utf-8", newline="") as f:
-
             writer = csv.writer(f, quoting=csv.QUOTE_ALL)
             if self.rows == 0:
                 writer.writerow(["Absolute Path", "Relative Path", "Label"])
