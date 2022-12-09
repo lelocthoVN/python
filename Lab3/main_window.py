@@ -39,11 +39,11 @@ class MainWindow(QMainWindow):
         button_create_annotation.setStyleSheet("background-color : #FF9900")
 
         button_copy_dataset = self.add_button("Скопировать датасет", 250, 50, 5, 100)
-        button_copy_dataset.clicked.connect(self.dataset_copy_random(1))
+        button_copy_dataset.clicked.connect(self.dataset_copy)
         button_copy_dataset.setStyleSheet("background-color : #FF9900")
 
         button_copy_random_dataset = self.add_button("Рандом датасета", 250, 50, 5, 150)
-        button_copy_random_dataset.clicked.connect(self.dataset_copy_random(2))
+        button_copy_random_dataset.clicked.connect(self.dataset_random)
         button_copy_random_dataset.setStyleSheet("background-color : #FF9900")
 
         next_dog_button = self.add_button("Следующая собака", 250, 50, 5, 200)
@@ -91,17 +91,21 @@ class MainWindow(QMainWindow):
             A.create_csv(self.folder_path)
 
 
-    def dataset_copy_random(self, type: int) -> None:
-        """Copy/Random набор данных и создание аннотации"""
+    def dataset_copy(self) -> None:
+        """Copying dataset (dataset/class_0000.jpg) and creating an annotation"""
         path_copy = QFileDialog.getExistingDirectory(self, 'Введите путь к папке, в которую будет скопирован датасет')
         if not path_copy:
             return
-        if (type == 1):
-            A = Annotation("dataCSV_copy.csv")
-            copy_dataset(self.folder_path, path_copy, A)
-        if (type == 2):
-            B = Annotation("dataCSV_random.csv")
-            dataset_random(self.folder_path, path_copy, B)
+        A = Annotation("dataCSV_copy.csv")
+        copy_dataset(self.folder_path, path_copy, A)
+
+    def dataset_random(self) -> None:
+        """Random dataset  and creating an annotation"""
+        path_random = QFileDialog.getExistingDirectory(self, 'Введите путь к папке, в которую будет рандом датасет')
+        if not path_random:
+            return
+        A = Annotation("dataCSV_random")
+        dataset_random(self.folder_path, path_random, A)
 
     def next_file(self, label: str, iter: AnnotationIterator):
         """
