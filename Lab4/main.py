@@ -74,9 +74,9 @@ def histogram_build(df: pd.DataFrame, label: str) -> list:
     """
     image = cv2.imread(np.random.choice(filter(df, label).Absolute_Path.to_numpy()))
     img_height, img_width, img_channels = image.shape
-    return [cv2.calcHist([image], [0], None, [256], [0, 256]) / (img_height * img_width),
-            cv2.calcHist([image], [1], None, [256], [0, 256]) / (img_height * img_width),
-            cv2.calcHist([image], [2], None, [256], [0, 256]) / (img_height * img_width)]
+    return [cv2.calcHist([image], [0], None, [255], [0, 255]) / (img_height * img_width),
+            cv2.calcHist([image], [1], None, [255], [0, 255]) / (img_height * img_width),
+            cv2.calcHist([image], [2], None, [255], [0, 255]) / (img_height * img_width)]
 
 def draw(df: pd.DataFrame, label: str) -> None:
     """
@@ -87,7 +87,7 @@ def draw(df: pd.DataFrame, label: str) -> None:
     plt.title('Image Histogram')
     plt.xlabel('Intensity color')
     plt.ylabel('Density pixel')
-    plt.xlim([0, 256])
+    plt.xlim([0, 255])
     hist = histogram_build(df, label)
     colors = ['b', 'g', 'r']
     for i in range(3):
